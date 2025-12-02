@@ -14,7 +14,7 @@ for file in "$TMP"/*.jpg; do
 	overlay=$(basename "$file")
 	overlay="${overlay%*.jpg}"
 	overlay="${overlay/C/\\:}"
-	ffmpeg -i "$file" -vf "unsharp=13:13:5,scale=1280:-1,crop=1280:720:0:(ih-720),drawtext=text='$overlay':fontcolor=white:fontsize=24:x=(w-text_w)/2:y=h-text_h-10" "$TMP/$count.png" -y
+	ffmpeg -i "$file" -vf "transpose=2,scale=1280:-1,crop=1280:720:0:(ih-720),drawtext=text='$overlay':fontcolor=white:fontsize=24:x=(w-text_w)/2:y=h-text_h-10" "$TMP/$count.png" -y
 	count=$((count + 1))
 done
 
