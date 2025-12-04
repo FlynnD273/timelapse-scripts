@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 
-TMP=~/Pictures/tmp
+path="$1"
+TMP="$path"/../tmp/
 if [[ ! -d "$TMP" ]]; then
-mkdir ~/Pictures/tmp
+	mkdir "$TMP"
 fi
-mv ~/Pictures/Timelapse/tmp/*.jpg $TMP
+cp "$path"/tmp/*.jpg "$TMP"
 
 vid_name=$(basename "$(find "$TMP" -type f | head -n1)")
-vid_name=~/"Pictures/Timelapse Videos/${vid_name% *}.mp4"
+vid_name="$path/videos/${vid_name% *}.mp4"
 
 count=1
 for file in "$TMP"/*.jpg; do
@@ -18,5 +19,5 @@ for file in "$TMP"/*.jpg; do
 	count=$((count + 1))
 done
 
-ffmpeg -i "$TMP/%d.png" -vf fps=fps=12 "$vid_name" -y
+ffmpeg -framerate 12 -i "$TMP/%d.png" "$vid_name" -y
 rm -rf "$TMP"
