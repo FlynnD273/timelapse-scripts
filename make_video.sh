@@ -1,10 +1,8 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 path="$1"
-TMP="$path"/../tmp/
-if [[ ! -d "$TMP" ]]; then
-	mkdir "$TMP"
-fi
+TMP=$(mktemp -d)
+mv "$path"/*.jpg "$path"/tmp/
 cp "$path"/tmp/*.jpg "$TMP"
 
 vid_name=$(basename "$(find "$TMP" -type f | head -n1)")
@@ -19,5 +17,6 @@ for file in "$TMP"/*.jpg; do
 	count=$((count + 1))
 done
 
-ffmpeg -framerate 12 -i "$TMP/%d.png" "$vid_name" -y
+ffmpeg -framerate 12 -i "$TMP/%d.png" "$vid_name" -y || exit
 rm -rf "$TMP"
+rm "$path"/tmp/*.jpg
